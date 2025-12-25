@@ -1,0 +1,93 @@
+:root{
+  --bg: #F6F9FA;
+  --card: #FFFFFF;
+  --accent: #F7A84A;
+  --text: #222;
+  --muted: #6b7280;
+  --btn-primary: #2563EB;
+  --btn-secondary: #EF4444;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%; margin:0; font-family:Inter, "Segoe UI", Roboto, system-ui, -apple-system;}
+body{
+  background: linear-gradient(180deg, var(--bg), #fff);
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+}
+
+.container{
+  width:100%;
+  max-width:880px;
+}
+
+header{ text-align:center; margin-bottom:18px;}
+h1{ margin:6px 0; font-size:1.5rem;}
+.subtitle{ margin:0; color:var(--muted); font-size:0.95rem;}
+
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:18px;
+  display:flex;
+  gap:18px;
+  align-items:center;
+  box-shadow: 0 8px 24px rgba(16,24,40,0.06);
+}
+
+/* left: cat */
+.left {
+  flex: 0 0 240px;           /* lebar area kiri */
+  display: flex;
+  align-items: center;       /* vertikal tengah */
+  justify-content: center;   /* horizontal tengah */
+  text-align: center;        /* jaga-jaga kalau img inline */
+}
+
+.left img {
+  width: 200px;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;            /* hilangin celah bawah img */
+  margin: 0 auto;            /* pastikan center juga */
+}
+
+
+
+/* right: timer & controls */
+.right{ flex:1; display:flex; flex-direction:column; align-items:center; gap:12px; padding:8px 12px;}
+
+.timer-display{
+  font-weight:700;
+  font-size:3.25rem;
+  letter-spacing:1px;
+  background:linear-gradient(90deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  padding:8px 18px;
+  border-radius:10px;
+  border: 2px solid rgba(0,0,0,0.06);
+  min-width:160px;
+  text-align:center;
+}
+
+.controls{ display:flex; gap:12px; margin-top:4px;}
+.btn{
+  border:0; padding:10px 16px; border-radius:10px; font-weight:600; cursor:pointer;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+.btn.primary{ background:var(--btn-primary); color:white; }
+.btn.secondary{ background: var(--btn-secondary); color:white; }
+
+/* hint */
+.settings-hint{ color:var(--muted); font-size:0.85rem; margin-top:6px; text-align:center; }
+
+/* responsive */
+@media (max-width:720px){
+  .card{ flex-direction:column; }
+  .left{ order:2; }
+  .right{ order:1; }
+  .timer-display{ font-size:2.6rem; }
+}
