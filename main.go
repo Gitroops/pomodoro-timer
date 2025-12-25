@@ -9,19 +9,15 @@ import (
 )
 
 func main() {
-	// Setup static file server
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	// Template handler
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// Handle favicon.ico request
 		if r.URL.Path == "/favicon.ico" {
 			http.ServeFile(w, r, "./static/image/favicon.ico")
 			return
 		}
 		
-		// Only handle root path
 		if r.URL.Path != "/" {
 			http.NotFound(w, r)
 			return
@@ -41,16 +37,13 @@ func main() {
 		}
 	})
 
-	// Get port from environment variable (Railway akan set ini)
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080" // Default untuk local development
+		port = "8080"
 	}
 
 	addr := ":" + port
-	log.Printf("🚀 Server starting on port %s", port)
-	log.Printf("📁 Static files from: ./static")
-	log.Printf("📄 Templates from: ./templates")
+	log.Printf("Server starting on port %s", port)
 	
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal("Server error:", err)
