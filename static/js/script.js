@@ -1,27 +1,25 @@
-// Simple Pomodoro timer: start (25:00) and stop (pause & reset to initial state)
 (() => {
   const startBtn = document.getElementById("startBtn");
   const stopBtn = document.getElementById("stopBtn");
   const timerEl = document.getElementById("timer");
 
-  // default duration in seconds (25 minutes)
   const DEFAULT_SECONDS = 25 * 60;
 
   let remaining = DEFAULT_SECONDS;
   let timerInterval = null;
   let running = false;
 
-  function formatTime(seconds){
+  function formatTime(seconds) {
     const m = Math.floor(seconds / 60).toString().padStart(2, "0");
     const s = (seconds % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   }
 
-  function updateDisplay(){
+  function updateDisplay() {
     timerEl.textContent = formatTime(remaining);
   }
 
-  function tick(){
+  function tick() {
     if (remaining <= 0) {
       clearInterval(timerInterval);
       timerInterval = null;
@@ -33,12 +31,10 @@
     updateDisplay();
   }
 
-  function onFinish(){
-    // visual feedback
+  function onFinish() {
     timerEl.textContent = "00:00";
     startBtn.disabled = false;
     startBtn.textContent = "Start";
-    // TODO: play a finish sound or animate cat (later)
     alert("Waktu selesai! Istirahat sebentar ✨");
   }
 
@@ -47,13 +43,11 @@
     running = true;
     startBtn.textContent = "Running...";
     startBtn.disabled = true;
-    // start interval
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(tick, 1000);
   });
 
   stopBtn.addEventListener("click", () => {
-    // Stop & reset to default
     if (timerInterval) {
       clearInterval(timerInterval);
       timerInterval = null;
@@ -63,9 +57,7 @@
     updateDisplay();
     startBtn.disabled = false;
     startBtn.textContent = "Start";
-    // optional: play animal sound (later)
   });
 
-  // initialize display
   updateDisplay();
 })();
