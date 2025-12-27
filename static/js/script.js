@@ -1,5 +1,6 @@
 (() => {
   const startBtn = document.getElementById("startBtn");
+  const pauseBtn = document.getElementById("pauseBtn");
   const stopBtn = document.getElementById("stopBtn");
   const timerEl = document.getElementById("timer");
 
@@ -8,6 +9,7 @@
   let remaining = DEFAULT_SECONDS;
   let timerInterval = null;
   let running = false;
+  let paused = false;
 
   function formatTime(seconds) {
     const m = Math.floor(seconds / 60).toString().padStart(2, "0");
@@ -17,6 +19,26 @@
 
   function updateDisplay() {
     timerEl.textContent = formatTime(remaining);
+  }
+
+  function showControlsForStart() {
+    startBtn.style.display = "block";
+    pauseBtn.style.display = "none";
+    stopBtn.style.display = "none";
+  }
+
+  function showControlsForRunning() {
+    startBtn.style.display = "none";
+    pauseBtn.style.display = "block";
+    stopBtn.style.display = "block";
+    pauseBtn.textContent = "Pause";
+  }
+
+  function showControlsForPaused() {
+    startBtn.style.display = "none";
+    pauseBtn.style.display = "block";
+    stopBtn.style.display = "block";
+    pauseBtn.textContent = "Play";
   }
 
   function tick() {
@@ -33,31 +55,61 @@
 
   function onFinish() {
     timerEl.textContent = "00:00";
-    startBtn.disabled = false;
-    startBtn.textContent = "Start";
-    alert("Waktu selesai! Istirahat sebentar ✨");
+    
+    // Tampilkan alert
+    if (confirm("Waktu selesai! Istirahat sebentar ✨\n\nKlik OK untuk kembali ke awal.")) {
+      resetToInitialState();
+    }
   }
 
-  startBtn.addEventListener("click", () => {
-    if (running) return;
-    running = true;
-    startBtn.textContent = "Running...";
-    startBtn.disabled = true;
-    if (timerInterval) clearInterval(timerInterval);
-    timerInterval = setInterval(tick, 1000);
-  });
-
-  stopBtn.addEventListener("click", () => {
+  function resetToInitialState() {
     if (timerInterval) {
       clearInterval(timerInterval);
       timerInterval = null;
     }
     running = false;
+    paused = false;
     remaining = DEFAULT_SECONDS;
     updateDisplay();
-    startBtn.disabled = false;
-    startBtn.textContent = "Start";
-  });
+    showControlsForStart();
+  }
 
+  function startTimer() {
+    if (running) return;
+    
+    running = true;
+    paused = false;
+    showControlsForRunning();
+    
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(tick, 1000);
+  }
+
+  function togglePause() {
+    if (!running) return;
+    
+    if (!paused) {
+      // Pause the timer
+      clearInterval(timerInterval);
+      timerInterval = null;
+      paused = true;
+      showControlsForPaused();
+    } else {
+      // Resume the timer
+      paused = false;
+      showControlsForRunning();
+      timerInterval = setInterval(tick, 1000);
+    }
+  }
+
+  // Event Listeners
+  startBtn.addEventListener("click", startTimer);
+
+  pauseBtn.addEventListener("click", togglePause);
+
+  stopBtn.addEventListener("click", resetToInitialState);
+
+  // Initialize
   updateDisplay();
+  showControlsForStart();
 })();

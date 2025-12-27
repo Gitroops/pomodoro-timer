@@ -73,14 +73,22 @@ h1{ margin:6px 0; font-size:1.5rem;}
   text-align:center;
 }
 
-.controls{ display:flex; gap:12px; margin-top:4px;}
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+  min-height: 44px; /* Agar tinggi tetap konsisten */
+}
 .btn{
   border:0; padding:10px 16px; border-radius:10px; font-weight:600; cursor:pointer;
   box-shadow: 0 6px 18px rgba(15,23,42,0.06);
 }
 .btn.primary{ background:var(--btn-primary); color:white; }
 .btn.secondary{ background: var(--btn-secondary); color:white; }
-
+.btn.play {
+  background: #10B981; /* Hijau untuk play */
+  color: white;
+}
 /* hint */
 .settings-hint{ color:var(--muted); font-size:0.85rem; margin-top:6px; text-align:center; }
 
@@ -90,4 +98,5 @@ h1{ margin:6px 0; font-size:1.5rem;}
   .left{ order:2; }
   .right{ order:1; }
   .timer-display{ font-size:2.6rem; }
+  .controls{ flex-wrap: wrap; justify-content: center; }
 }
