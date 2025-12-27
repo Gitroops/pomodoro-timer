@@ -77,17 +77,31 @@ h1{ margin:6px 0; font-size:1.5rem;}
   display: flex;
   gap: 12px;
   margin-top: 4px;
-  min-height: 44px; /* Agar tinggi tetap konsisten */
+  justify-content: center;
+  align-items: center;
 }
-.btn{
-  border:0; padding:10px 16px; border-radius:10px; font-weight:600; cursor:pointer;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+.btn {
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  transition: all 0.2s ease;
+  min-width: 80px;
+  text-align: center;
 }
-.btn.primary{ background:var(--btn-primary); color:white; }
-.btn.secondary{ background: var(--btn-secondary); color:white; }
-.btn.play {
-  background: #10B981; /* Hijau untuk play */
+.btn.primary {
+  background: var(--btn-primary);
   color: white;
+}
+.btn.secondary {
+  background: var(--btn-secondary);
+  color: white;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
 }
 /* hint */
 .settings-hint{ color:var(--muted); font-size:0.85rem; margin-top:6px; text-align:center; }

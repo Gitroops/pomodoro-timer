@@ -1,6 +1,6 @@
 (() => {
   const startBtn = document.getElementById("startBtn");
-  const pauseBtn = document.getElementById("pauseBtn");
+  const pausePlayBtn = document.getElementById("pausePlayBtn");
   const stopBtn = document.getElementById("stopBtn");
   const timerEl = document.getElementById("timer");
 
@@ -8,8 +8,8 @@
 
   let remaining = DEFAULT_SECONDS;
   let timerInterval = null;
-  let running = false;
-  let paused = false;
+  let isPaused = false;
+  let isRunning = false;
 
   function formatTime(seconds) {
     const m = Math.floor(seconds / 60).toString().padStart(2, "0");
@@ -21,31 +21,11 @@
     timerEl.textContent = formatTime(remaining);
   }
 
-  function showControlsForStart() {
-    startBtn.style.display = "block";
-    pauseBtn.style.display = "none";
-    stopBtn.style.display = "none";
-  }
-
-  function showControlsForRunning() {
-    startBtn.style.display = "none";
-    pauseBtn.style.display = "block";
-    stopBtn.style.display = "block";
-    pauseBtn.textContent = "Pause";
-  }
-
-  function showControlsForPaused() {
-    startBtn.style.display = "none";
-    pauseBtn.style.display = "block";
-    stopBtn.style.display = "block";
-    pauseBtn.textContent = "Play";
-  }
-
   function tick() {
     if (remaining <= 0) {
       clearInterval(timerInterval);
       timerInterval = null;
-      running = false;
+      isRunning = false;
       onFinish();
       return;
     }
@@ -56,60 +36,95 @@
   function onFinish() {
     timerEl.textContent = "00:00";
     
-    // Tampilkan alert
-    if (confirm("Waktu selesai! Istirahat sebentar ✨\n\nKlik OK untuk kembali ke awal.")) {
+    // Tampilkan notifikasi
+    const confirmed = confirm("Waktu selesai! Istirahat sebentar ✨");
+    
+    if (confirmed) {
+      // Kembali ke tampilan awal
       resetToInitialState();
     }
   }
 
-  function resetToInitialState() {
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      timerInterval = null;
-    }
-    running = false;
-    paused = false;
-    remaining = DEFAULT_SECONDS;
-    updateDisplay();
-    showControlsForStart();
-  }
-
   function startTimer() {
-    if (running) return;
+    if (isRunning) return;
     
-    running = true;
-    paused = false;
-    showControlsForRunning();
+    isRunning = true;
+    isPaused = false;
+    
+    // Sembunyikan tombol start, tampilkan pause dan stop
+    startBtn.style.display = "none";
+    pausePlayBtn.style.display = "inline-block";
+    stopBtn.style.display = "inline-block";
+    pausePlayBtn.textContent = "Pause";
+    pausePlayBtn.classList.remove("primary");
+    pausePlayBtn.classList.add("secondary");
     
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(tick, 1000);
   }
 
-  function togglePause() {
-    if (!running) return;
+  function pauseResumeTimer() {
+    if (!isRunning) return;
     
-    if (!paused) {
-      // Pause the timer
+    if (isPaused) {
+      // Resume timer
+      isPaused = false;
+      pausePlayBtn.textContent = "Pause";
+      pausePlayBtn.classList.remove("primary");
+      pausePlayBtn.classList.add("secondary");
+      
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(tick, 1000);
+    } else {
+      // Pause timer
+      isPaused = true;
+      pausePlayBtn.textContent = "Play";
+      pausePlayBtn.classList.remove("secondary");
+      pausePlayBtn.classList.add("primary");
+      
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+  }
+
+  function stopTimer() {
+    // Reset semua state
+    resetToInitialState();
+  }
+
+  function resetToInitialState() {
+    // Hentikan timer
+    if (timerInterval) {
       clearInterval(timerInterval);
       timerInterval = null;
-      paused = true;
-      showControlsForPaused();
-    } else {
-      // Resume the timer
-      paused = false;
-      showControlsForRunning();
-      timerInterval = setInterval(tick, 1000);
     }
+    
+    // Reset state
+    isRunning = false;
+    isPaused = false;
+    remaining = DEFAULT_SECONDS;
+    
+    // Update tampilan
+    updateDisplay();
+    
+    // Kembalikan ke tampilan awal: hanya tombol Start yang terlihat
+    startBtn.style.display = "inline-block";
+    pausePlayBtn.style.display = "none";
+    stopBtn.style.display = "none";
+    
+    // Reset teks tombol pause/play
+    pausePlayBtn.textContent = "Pause";
+    pausePlayBtn.classList.remove("primary");
+    pausePlayBtn.classList.add("secondary");
   }
 
   // Event Listeners
   startBtn.addEventListener("click", startTimer);
+  pausePlayBtn.addEventListener("click", pauseResumeTimer);
+  stopBtn.addEventListener("click", stopTimer);
 
-  pauseBtn.addEventListener("click", togglePause);
-
-  stopBtn.addEventListener("click", resetToInitialState);
-
-  // Initialize
+  // Inisialisasi tampilan
   updateDisplay();
-  showControlsForStart();
 })();
